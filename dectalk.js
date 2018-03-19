@@ -37,10 +37,10 @@ function sendReadFile(pathname, res) {
 
 app.use('/sing.html', express.static('./sing.html'));
 
-app.get('/[tts?text=]{1}*', function(req, res){
+app.get('/tts/*', function(req, res){
 	
 	///
-	var songText = decodeURI(req.url.substring(10)).replace(/(\r\n|\n|\r)/gm,"");
+	var songText = decodeURI(req.url.substring(5)).replace(/(\r\n|\n|\r)/gm,"");
 	var md5sum = crypto.createHash('md5').update(songText).digest('hex');
 	if (songText.length > 2000) {
 		//ok, calm down buddy that's a bit long.

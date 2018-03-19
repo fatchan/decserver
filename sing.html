@@ -17,7 +17,7 @@
         var text = document.getElementById("input-text").value.replace(/(\r\n|\n|\r)/gm,"");
         var audio = document.getElementById("result-audio");
         if (text !== lastText) {
-          audio.src = "/tts?text=" + text;
+          audio.src = "/tts/" + text;
           lastText = text;
         }
 		audio.play();
