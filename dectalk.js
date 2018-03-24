@@ -4,7 +4,7 @@ const http = require('http');
 const url = require('url');
 const fs = require('fs');
 var crypto = require('crypto');
-const port = 9000;
+const port = 80;
 
 var express = require('express');
 var app = express();
@@ -34,9 +34,6 @@ function sendReadFile(pathname, res) {
 	});
 }
 
-
-app.use('/sing.html', express.static('./sing.html'));
-
 app.get('/tts/*', function(req, res){
 	
 	///
@@ -60,10 +57,9 @@ app.get('/tts/*', function(req, res){
 
 	fs.exists(pathname, function(exist) {
 		if (!exist) {
-			console.log('generating new file');
 			dectalk(songText, md5sum).then(stdout => {
 				sendReadFile(pathname, res);
-				console.log(req.connection.remoteAddress+' - NEW REQUEST - ' + songText + '\n' + md5sum);
+				console.log(req.connection.remoteAddress+' - NEW REQUEST - ' + songText.substr(0, 50) + '\n' + md5sum);
 			}).catch(err => {
 				res.statusCode = 500;
 				res.end('error generating audio: '+err);
@@ -72,11 +68,16 @@ app.get('/tts/*', function(req, res){
 		}
 		// read file from file system
 		sendReadFile(pathname, res);
-		console.log(req.connection.remoteAddress+' - REQUEST - ' + songText + '\n' + md5sum);
+		console.log(req.connection.remoteAddress+' - REQUEST - ' + songText.substr(0, 50) + '\n' + md5sum);
 	});
 
 })
 
+app.get('/sing.html', (req, res) => {
+
+    res.status(301).redirect('https://69420.me/sing.html');
+
+})
 
 app.listen(port);
 
